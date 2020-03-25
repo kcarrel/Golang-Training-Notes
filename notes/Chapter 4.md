@@ -86,3 +86,112 @@ ex:
     }
 ```
 Slices cannot be compared to each other; only nil
+
+## Structs
+A *struct* is an aggregate data type that groups together 0 or more named values as a single entity.
+
+*same to c p much*
+
+Ex:
+```
+type Employee struct {
+    ID          int
+    Name        string
+    Address     string
+    DoB         time.Time
+    Position    string
+    Salary      int
+    ManagerId   int
+}
+var dilbert Employee
+
+```
+access -> dilbert.Salary
+
+Take it's address and access it through a pointer:
+position := &dilbert.Position
+*position = "Senior " + *position
+
+Dot notation also works with a pointer to a struct:
+var employeeOfTheMonth *Employee = &dilbert
+employeeOfTheMonth.Position += " (proactive team player)"
+
+Note:
+- Field order is significant to type identity
+- The name of a struct field is exported if it begins with a capital letter
+- Zero value for a struct is composed of zero values of each of its field
+
+## Struct Literals
+
+2 types:
+```
+type Point struct { X, Y int }
+p := Point{1,2}
+
+or
+
+anim := gif.GIF{LoopCount: nframes}
+
+```
+
+Pass a struct types to or return from functions using pointers
+
+```
+func Bonus(e *Employee, percent int) int {
+    return e.Salary * percent / 100
+}
+```
+
+Shorthand notation to create and init a struct variable and obtain its address:
+```
+pp := &Point{1, 2}
+```
+
+**Comparing Structs**
+If all the fields of a struct are comparable, the struct itself is comparable using == or !=.
+
+## Struct Embedding and Anonymous Fields
+Go's *struct embedding* mechanism allows us to use one named struct type as an anonymous field of another struct type. A simple syntatic shortcut so that a simple dot expression like x.f can stand for a chain of fields like x.d.e.f.
+
+```
+type Ball struct {
+    Radius   int
+    Material string
+}
+
+embed into a new struct
+type Football struct {
+    Ball
+}
+
+fb := Football{}
+fmt.Printf("fb = %+v\n", fb)
+
+outputs:
+fb = {Ball:{Radius:0 Material:}}
+```
+Why embed a type that has no subfields?
+- Main way that complex object behavior are comosed from simpler ones.
+
+## JSON
+Coverting a Go data structure to JSIN is called *marshalling* using json.Marshal. Marshal produces a  byte slice containing a very long string with no extra whtite space. 
+
+Unmarshaling (decoding JSON and populating a Go data structure) using json.Unmarshal. 
+
+json.Encoder is a corresponding streaming encoder. 
+
+## Text and HTML Templates
+Separate the format from the code:
+- text/template packages
+- html/template packages
+
+ex:
+```
+const templ = '{{.TotalCount}} issues:
+{{range .Items}}------------------------
+Number: {{.Number}}
+User: {{.User.Login}}
+Title: {{.Title | printf "%.64s"}}
+Age:  {{.CreatedAt | daysAgo}} days
+{{end}}'
+```
