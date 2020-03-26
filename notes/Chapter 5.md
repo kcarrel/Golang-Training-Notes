@@ -71,3 +71,56 @@ Functions are *first-class values* in Go. Function values have types and can be 
 ## Anonymous Functions
 A *function literal* can be used to denote a function value within any expression. A function literal is written like a function declaration but without a name following the func keyword. The value is an *anonymous function*.
 
+**Recursion in Anonymous functions**: must first declare a variable, and then assign the anonymous function to the variable. 
+
+
+## Caveat: Capturing Iteration Variables
+A consequence of the scope rules for loop variables - All function values created by a loop "capture" and share the same variable - an addressable storage location, not its value at that particular moment. 
+
+## Variadic Functions
+A variadic function is one that can be called with varying numbers of arguments. (ex: fmt.Printf)
+
+To declare a variadic function: the type of the final parameter is preceded by an ellipsis, '...' which indicates that the function may be called with any number of arguments of this type.
+ex:
+```
+func sum(vals ...int) int {
+    total := 0
+    for _, val := range vals {
+        total += val
+    }
+    return total
+}
+```
+
+Variadic functions are often used for string formatting. 
+
+## Deferred Function Calls
+Syntatically - a *defer* statement is an ordinary function or method call prefixed by the keyword *defer*. 
+
+The function and argument expressions are evaluated when the statement is executed, but the actual call is deferred until the function that contains the defer statement has finished. Any number of calls can be deferred - they are executed in the reverse of the order in which they are deferred. 
+
+Defer statements are often paired with open/close/connect/disconnect/lock/unlock to ensure resources are released in all cases. 
+
+Can be used to pair "on entry" and "on exit" actions when debugging a complex function. 
+
+Deferred functions run after return statements have updated the function's result variables. 
+
+## Panic
+When the Go runtime detects some mistakes, like out of bounds array access or nil pointer dereference it *panics*.
+
+Typical panic:
+- normal execution stops
+- all deferred function calls in that goroutine are executed
+- the program crashes with a log message 
+The log message includes
+- a panic value (error message)
+- for each goroutine a stack trace
+
+Note: not all panics come from runtime. It can also be called directly! A panic is often the best thing to do when an "impossible situation" happens!
+
+Panics are reserved for grave errors (logical inconsistencys).
+
+## Recover 
+Recover ends the current state of panic and returns the panic value. 
+
+Note: don't recover from panics indiscriminately. It is safest to recover selectively if at all. 
