@@ -69,3 +69,5 @@ for {
 Functions are *first-class values* in Go. Function values have types and can be assigned to variables or passed to or returned from functions. A function value may br called like any other function. Function values may be compared with nil. Function values let us parameterize our functions over data and behavior too. 
 
 ## Anonymous Functions
+A *function literal* can be used to denote a function value within any expression. A function literal is written like a function declaration but without a name following the func keyword. The value is an *anonymous function*.
+
