@@ -53,9 +53,37 @@ Unbuffered channels - give stronger synchronization guarantees because every sen
 With buffered channels these operations are decoupled. 
 
 Failure to allocate sufficient buffer capacity would cause the program to deadlock. 
-## Looping in Parallel 
-
 ## Multiplexing with select 
+A select waits until a communication for some cases is ready to proceed then performs that communication and executes the cases's associated statements. 
+```
+select {
+    case <- ch1:
+        ....
+    case x := <-ch2:
+        ...
+    case ch3 <- y:
+        ...
+    default:
+        ...
+}
+
+```
 
 ## Cancellation 
+There is no way for one goroutine to terminate another directly, since theat would leave all its shared variables in undefined states.
 
+For cancellation we need a reliable mechanism to broadcast an event over a channel so that many goroutines can see it as it occurs and can later see that it has occured. 
+
+This means that main can unblock all the senders simply by closing the done channel. This close is effectively a broadcast signal to the senders. We extend each of our pipeline functions to accept done as a parameter and arrange for the close to happen via a defer statement, so that all return paths from main will signal the pipeline stages to exit.
+
+- create a cancellation channel on which no values are ever sent but whose closure indicates that it is time for the program to stop what it is doing
+- define a utility function, cancelled, that checks the cancellation state at the instant it is called.
+- create a goroutine that will read from stdin
+- as soon as input is read the goroutine broadcasts the cancellation by closing the done channel
+
+
+Guidelines for pipeline construction:
+
+- stages close their outbound channels when all the send operations are done.
+- stages keep receiving values from inbound channels until those channels are closed or the senders are unblocked.
+- Pipelines unblock senders either by ensuring there's enough buffer for all the values that are sent or by explicitly signalling senders when the receiver may abandon the channel.
