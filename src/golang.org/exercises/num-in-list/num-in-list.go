@@ -1,3 +1,5 @@
+//When provided a list and a target number - return if the number is present in the list or not
+
 package main
 
 import (
