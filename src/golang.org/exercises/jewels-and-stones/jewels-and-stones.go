@@ -4,31 +4,32 @@ import (
 	"fmt"
 )
 
-func numJewelsInStones(J string, S string) int {
+func numJewelsInStones(j string, s string) int {
 	jewels := make(map[string]struct{})
-	for i := range J {
-		jewels[string(J[i])] = struct{}{}
+	for i := range j {
+		jewels[string(j[i])] = struct{}{}
 	}
 
 	count := 0
-	for i := range S {
-		if _, ok := jewels[string(S[i])]; ok {
+	for i := range s {
+		if _, ok := jewels[string(s[i])]; ok {
 			count++
 		}
 	}
-	fmt.Printf("Count: %d \n", count)
 	return count
 }
 
 func main() {
-	var J = "aA"
-	var S = "aAAbbbb"
-	numJewelsInStones(J, S)
+	var j = "aA"
+	var s = "aAAbbbb"
+	receivedCount := numJewelsInStones(j, s)
+	fmt.Printf("Count: %d \n", receivedCount)
 	fmt.Printf("Expected count: 3 \n")
 
-	var J1 = "z"
-	var S1 = "ZZ"
-	numJewelsInStones(J1, S1)
+	var j1 = "z"
+	var s1 = "ZZ"
+	receivedCount2 := numJewelsInStones(j1, s1)
+	fmt.Printf("Count: %d \n", receivedCount2)
 	fmt.Printf("Expected Count: 0 \n")
 
 }
