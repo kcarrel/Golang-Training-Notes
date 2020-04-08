@@ -6,7 +6,6 @@ import (
 
 func subtractProductAndSum(n int) int {
 	if n <= 0 {
-		fmt.Printf("Result: 0 \n")
 		return 0
 	}
 
@@ -19,19 +18,19 @@ func subtractProductAndSum(n int) int {
 		product *= mod
 		n /= 10
 	}
-	result := product - sum
-	fmt.Printf("Result: %d \n", result)
-	return result
+	return product - sum
 }
 
 func main() {
-	subtractProductAndSum(234)
+	result := subtractProductAndSum(234)
+	fmt.Printf("Result: %d \n", result)
 	fmt.Printf("Expected result: 15 \n")
 
-	subtractProductAndSum(4421)
+	result1 := subtractProductAndSum(4421)
+	fmt.Printf("Result: %d \n", result1)
 	fmt.Printf("Expected result: 21 \n")
 
-	subtractProductAndSum(0)
+	result2 := subtractProductAndSum(0)
+	fmt.Printf("Result: %d \n", result2)
 	fmt.Printf("Expected result: 0 \n")
-
 }
