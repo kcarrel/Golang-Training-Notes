@@ -86,3 +86,15 @@ px := d.Addr().Interface().(*int)   // px := &x
 *px = 3     // x = 3
 fmt.Println(x)  //"3"
 ```
+
+## Accessing Struct Field Tags
+The Unpack function populates the struct from the request so that the parameters can be accessed conveniently and with an appropriate type. 
+It does 3 things:
+- calls req.ParseForm() to parse the request
+- builds a mapping from the effective name of each field to the variable for that field
+- Iterates over the name/value pairs of the HTTP parameters and updates the corresponding struct fields. 
+
+## 3 reasons why reflection should be used with care
+- reflection-based code can be fragile
+- since types serve as a form of documentation and the operations of reflection cannot be subject to static type checking, heavily reflective code is often hard to understand
+- reflection-based functions may be one or two orders of magnitude slower than code specialized for a particular type 
